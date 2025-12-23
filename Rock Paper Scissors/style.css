@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 1rem;
+  text-align: center;
+  color: white;
+  font-family: Montserrat;
+  background-color: rgb(27, 24, 54);
+}
+
+.title {
+  font-size: 3rem;
+}
+
+.pick-move-text {
+  margin-top: 1rem;
+  margin-bottom: .5rem;
+}
+
+.player-btns-container {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.player-move-btn {
+  background-color: transparent;
+  border: 2px solid white;
+  margin: .5rem .7rem 0;
+  padding-bottom: .3rem;
+  height: 4.5rem;
+  width: 4.5rem;
+  font-size: 1.8rem;
+  border-radius: 50%;
+}
+
+.player-move-btn:hover {
+  background-color: white;
+  color: orange;
+  transform: rotate(15deg);
+}
+
+.game-counter {
+  /* line-height: 1.5rem; */
+  margin-top: 2rem;
+}
+
+.match-container {
+  /* margin-top: 2rem; */
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.move-container {
+  padding: 1rem;
+}
+
+.move {
+  margin-top: 2.5rem;
+  line-height: 12rem;
+  font-size: 14rem;
+}
+
+@keyframes player-anim {
+  0%   { transform: translateY(0) rotate(90deg) scaleX(-1); }
+  50%  { transform: translateY(-1rem) rotate(90deg) scaleX(-1); }
+}
+
+.player-move {
+  transform: translateY(0) rotate(90deg) scaleX(-1);
+}
+
+.player-move-anim {
+  animation-name: player-anim;
+  animation-duration: .45s;
+  animation-iteration-count: 3.7;
+}
+
+@keyframes computer-anim {
+  0%   { transform: translateY(0) rotate(-90deg); }
+  50%  { transform: translateY(-1rem) rotate(-90deg); }
+}
+
+.computer-move {
+  transform: rotate(-90deg);
+}
+
+.computer-move-anim {
+  animation-name: computer-anim;
+  animation-duration: .45s;
+  animation-iteration-count: 3.7;
+}
+
+.vs {
+  margin: 0 3rem;
+  margin-bottom: -4rem;
+  align-self: center;
+}
+
+.results {
+  margin-bottom: 1.5rem;
+  /* font-size: 2rem; */
+}
+
+.score-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.score {
+  margin: 0 1rem;
+}
+
+.wins, .losses, .ties {
+  margin-top: .5rem;
+  font-weight: bold;
+}
+
+.buttons-container > button {
+  margin: 0 .5rem;
+}
+
+.control-btn {
+  border: 2px solid orange;
+  background-color: transparent;
+  color: orange;
+
+  font-size: 1rem;
+  padding: .7rem 1.7rem;
+  border-radius: 8rem;
+}
+
+.control-btn:hover {
+  background-color: orange;
+  color: white;
+}
