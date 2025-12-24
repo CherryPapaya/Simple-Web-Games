@@ -1,0 +1,30 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.game-screen {
+  padding: 1rem;
+  background-color: aquamarine;
+  width: 50%;
+  height: 100vh;
+  justify-self: center;
+  align-content: center;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+}
+
+.tile {
+  height: 25vh;
+  width: 30%;
+  background-color: white;
+  margin: .2rem;
+}
+
+.box {
+  background-color: black;
+}

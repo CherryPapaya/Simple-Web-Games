@@ -27,14 +27,12 @@ function runAutoPlay() {
 
   playGame(pickComputerMove());
 
-  playerMoveIcon.addEventListener(
-    'animationend',
+  playerMoveIcon.addEventListener('animationend',
     () => {
       if (isAutoPlaying) {
         setTimeout(runAutoPlay, 1000);
       }
-    },
-    { once: true }
+    }, { once: true }
   );
 }
 
@@ -90,7 +88,8 @@ function playGame(playerMove) {
 
   playAnimation();
 
-  playerMoveIcon.addEventListener('animationend', () => {
+  playerMoveIcon.addEventListener('animationend',
+    () => {
       showResult(playerMove, computerMove, result);
       showScore();
 
@@ -144,8 +143,6 @@ function showScore() {
 }
 
 function showResult(playerMove, computerMove, result) {
-  const computerMoveIcon = document.querySelector('.computer-move');
-  const playerMoveIcon = document.querySelector('.player-move');
   const results = document.querySelector('.results');
 
   if (computerMove === 'rock') {
