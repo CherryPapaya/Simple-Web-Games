@@ -4,11 +4,25 @@
   box-sizing: border-box;
 }
 
+main {
+  display: flex;
+  justify-content: center;
+
+}
+
+.retry-btn {
+  padding: .5rem 1rem;
+  font-size: 1.5rem;
+}
+
 .game-screen {
+  width: 50%;
+}
+
+.floor {
+  height: 100vh;
   padding: 1rem;
   background-color: aquamarine;
-  width: 50%;
-  /* height: 100vh; */
   justify-self: center;
   align-content: center;
 }
