@@ -1,12 +1,10 @@
-const rand = Math.ceil(Math.random() * 5);
-
+const rand = 3 + Math.ceil(Math.random() * 3);
 const floor = document.getElementById('floor');
 const move = document.querySelector('.text');
 let tile;
-
 let box;
+let target;
 let keyPress;
-
 let row;
 let col;
 
@@ -25,11 +23,14 @@ for (let i = 0; i < rand; i++) {
   floor.appendChild(rowDiv);
 }
 
+target = document.querySelector(`[data-row="${rand-1}"][data-col="${rand-1}"]`);
+target.classList.add('target');
+
 box = document.querySelector('[data-row="0"][data-col="0"]');
 box.classList.add('box');
 
-row = box.dataset.row;
-col = box.dataset.col;
+row = Number(box.dataset.row);
+col = Number(box.dataset.col);
 
 document.addEventListener('keydown', (event) => {
   keyPress = event.key;
@@ -61,6 +62,11 @@ document.addEventListener('keydown', (event) => {
     box.classList.remove('box');
     box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`)
     box.classList.add('box');
+  }
+
+  if (box.dataset.row === target.dataset.row && box.dataset.col === target.dataset.col) {
+    move.innerHTML = `You win!`;
+    location.reload();
   }
 
   move.innerHTML = keyPress;

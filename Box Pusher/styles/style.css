@@ -8,7 +8,7 @@
   padding: 1rem;
   background-color: aquamarine;
   width: 50%;
-  height: 100vh;
+  /* height: 100vh; */
   justify-self: center;
   align-content: center;
 }
@@ -27,4 +27,8 @@
 
 .box {
   background-color: black;
+}
+
+.target {
+  background-color: yellow
 }
