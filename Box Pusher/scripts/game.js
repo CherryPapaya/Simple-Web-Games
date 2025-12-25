@@ -26,71 +26,19 @@ function handleMove(event) {
   if (keyPress.includes('Arrow')) event.preventDefault();
 
   if (keyPress.includes('Right')) {
-    const nextCol = col + 1;
-    if (nextCol >= arenaSize) return;
-
-    const nextTile = document.querySelector(`[data-row="${row}"][data-col="${nextCol}"]`);
-
-    if (nextTile.classList.contains('obstacle')) {
-      console.log("Obstacle blocking!");
-      return;
-    }
-
-    box.classList.remove('box');
-    col = nextCol;
-    box = nextTile;
-    box.classList.add('box');
+    move(0, 1);
   }
 
   if (keyPress.includes('Left')) {
-    const prevCol = col - 1;
-    if (prevCol < 0) return;
-
-    const prevTile = document.querySelector(`[data-row="${row}"][data-col="${prevCol}"]`);
-
-    if (prevTile.classList.contains('obstacle')) {
-      console.log("Obstacle blocking!");
-      return;
-    }
-
-    box.classList.remove('box');
-    col = prevCol;
-    box = prevTile;
-    box.classList.add('box');
+    move(0, -1);
   }
 
   if (keyPress.includes('Up')) {
-    const prevRow = row - 1;
-    if (prevRow < 0) return;
-
-    const prevTile = document.querySelector(`[data-row="${prevRow}"][data-col="${col}"]`);
-
-    if (prevTile.classList.contains('obstacle')) {
-      console.log("Obstacle blocking!");
-      return;
-    }
-
-    box.classList.remove('box');
-    row = prevRow;
-    box = prevTile;
-    box.classList.add('box');
+    move(-1, 0);
   }
 
   if (keyPress.includes('Down')) {
-    const nextRow = row + 1;
-    if (nextRow >= arenaSize) return;
-
-    const nextTile = document.querySelector(`[data-row="${nextRow}"][data-col="${col}"]`);
-
-    if (nextTile.classList.contains('obstacle')) {
-      console.log("Obstacle blocking!");
-      return;
-    }
-
-    box.classList.remove('box');
-    row = nextRow;
-    box = nextTile;
-    box.classList.add('box');
+    move(1, 0);
   }
 
   if (box.dataset.row === target.dataset.row && box.dataset.col === target.dataset.col) {
@@ -105,4 +53,26 @@ function handleMove(event) {
   }
 }
 
+function move(dy, dx) {
+  const nextCol = col + dx;
+  const nextRow = row + dy;
 
+  if (nextCol >= arenaSize ||
+      nextCol < 0 ||
+      nextRow >= arenaSize ||
+      nextRow < 0
+  ) return;
+
+  const nextTile = document.querySelector(`[data-row="${nextRow}"][data-col="${nextCol}"]`);
+
+  if (nextTile.classList.contains('obstacle')) {
+    console.log("Obstacle blocking!");
+    return;
+  }
+
+  box.classList.remove('box');
+  col = nextCol;
+  row = nextRow;
+  box = nextTile;
+  box.classList.add('box');
+}
