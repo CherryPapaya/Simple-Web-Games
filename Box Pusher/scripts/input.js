@@ -1,2 +1,2 @@
-import { box } from './game.js';
+// import { box } from './game.js';
 

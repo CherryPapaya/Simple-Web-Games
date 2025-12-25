@@ -16,7 +16,7 @@ export function buildArena(arenaSize) {
 
     for (let j = 0; j < arenaSize; j++) {
       tile = document.createElement('div');
-      tile.style.height = floorHeight / arenaSize * 0.9 + 'px';
+      // tile.style.height = floorHeight / arenaSize * 0.9 + 'px';
       tile.style.width = floorWidth / arenaSize * 0.9 + 'px';
       tile.className = `tile`;
       tile.dataset.row = i;

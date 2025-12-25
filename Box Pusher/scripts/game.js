@@ -3,6 +3,9 @@ import { buildArena } from "./arena.js";
 
 const arenaSize = Math.floor(Math.random() * 10) + 20;
 let box;
+let keyPress;
+let row;
+let col;
 
 buildArena(arenaSize);
 
@@ -11,10 +14,6 @@ target.classList.add('target');
 
 box = document.querySelector('[data-row="0"][data-col="0"]');
 box.classList.add('box');
-
-let keyPress;
-let row;
-let col;
 
 row = Number(box.dataset.row);
 col = Number(box.dataset.col);
@@ -25,37 +24,25 @@ function handleMove(event) {
   keyPress = event.key;
   if (keyPress.includes('Arrow')) event.preventDefault();
 
-  if (keyPress.includes('Right')) {
-    move(0, 1);
-  }
-
-  if (keyPress.includes('Left')) {
-    move(0, -1);
-  }
-
-  if (keyPress.includes('Up')) {
-    move(-1, 0);
-  }
-
-  if (keyPress.includes('Down')) {
-    move(1, 0);
-  }
+  if (keyPress.includes('Right')) move(0, 1);
+  if (keyPress.includes('Left')) move(0, -1);
+  if (keyPress.includes('Up')) move(-1, 0);
+  if (keyPress.includes('Down')) move(1, 0);
 
   if (box.dataset.row === target.dataset.row && box.dataset.col === target.dataset.col) {
     document.removeEventListener('keydown', handleMove);
     document.addEventListener('keydown', (event) => {
-      if (event.key === ('Enter')) {
-        location.reload();
-      }
+      if (event.key === ('Enter')) location.reload();
     });
+
     target.classList.add('win-tile');
     console.log('You win!');
   }
 }
 
 function move(dy, dx) {
-  const nextCol = col + dx;
   const nextRow = row + dy;
+  const nextCol = col + dx;
 
   if (nextCol >= arenaSize ||
       nextCol < 0 ||
