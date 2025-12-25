@@ -8,6 +8,9 @@ let row;
 let col;
 
 buildArena(arenaSize);
+// placePlayer();
+// placeTarget();
+// generateObstacles();
 
 const target = document.querySelector(`[data-row="${arenaSize-1}"][data-col="${arenaSize-1}"]`);
 target.classList.add('target');
@@ -42,13 +45,13 @@ function move(dy, dx) {
 
   const nextTile = document.querySelector(`[data-row="${nextRow}"][data-col="${nextCol}"]`);
 
-  if (nextTile.classList.contains('target')) {
-    handleWin();
-  }
-
   if (nextTile.classList.contains('obstacle')) {
     console.log("Obstacle blocking!");
     return;
+  }
+
+  if (nextTile.classList.contains('target')) {
+    handleWin();
   }
 
   box.classList.remove('box');

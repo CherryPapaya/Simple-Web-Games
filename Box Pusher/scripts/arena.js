@@ -1,5 +1,3 @@
-
-
 const floor = document.getElementById('floor');
 // const floorHeight = floor.offsetHeight;
 const floorWidth = floor.offsetWidth;
