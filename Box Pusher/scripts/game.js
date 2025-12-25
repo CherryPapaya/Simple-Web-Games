@@ -1,4 +1,4 @@
-const arenaSize = 5 + Math.ceil(Math.random() * 10);
+const arenaSize = Math.floor(Math.random() * 10) + 20;
 const floor = document.getElementById('floor');
 const floorHeight = floor.offsetHeight;
 const floorWidth = floor.offsetWidth;
@@ -19,8 +19,8 @@ for (let i = 0; i < arenaSize; i++) {
 
   for (let j = 0; j < arenaSize; j++) {
     tile = document.createElement('div');
-    tile.style.height = floorHeight / arenaSize / 1.1 + 'px';
-    tile.style.width = floorWidth / arenaSize + 'px';
+    tile.style.height = floorHeight / arenaSize * 0.9 + 'px';
+    tile.style.width = floorWidth / arenaSize * 0.9 + 'px';
     tile.className = `tile`;
     tile.dataset.row = i;
     tile.dataset.col = j;
@@ -30,7 +30,7 @@ for (let i = 0; i < arenaSize; i++) {
   floor.appendChild(rowDiv);
 }
 
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < arenaSize * 2; i++) {
   obstacleRandRow = Math.floor(Math.random() * arenaSize);
   obstacleRandCol = Math.floor(Math.random() * arenaSize);
 
