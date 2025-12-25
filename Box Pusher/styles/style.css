@@ -21,6 +21,7 @@ main {
 
 .floor {
   height: 100vh;
+  width: 100%;
   padding: 1rem;
   background-color: aquamarine;
   justify-self: center;
@@ -33,10 +34,7 @@ main {
 }
 
 [class*='tile'] {
-  height: 8rem;
-  width: 8rem;
   background-color: white;
-  margin: .2rem;
 }
 
 .box {
@@ -45,4 +43,18 @@ main {
 
 .target {
   background-color: yellow
+}
+
+@keyframes rainbow {
+  0% {background-color: red;}
+  16% {background-color: orange;}
+  32% {background-color: yellow;}
+  48% {background-color: green;}
+  64% {background-color: blue;}
+  80% {background-color: indigo;}
+  100% {background-color: violet;}
+}
+
+.win-tile {
+  animation: rainbow 2s infinite linear;
 }
