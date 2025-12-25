@@ -3,9 +3,11 @@ const floor = document.getElementById('floor');
 const floorHeight = floor.offsetHeight;
 const floorWidth = floor.offsetWidth;
 
-// const retryBtn = document.querySelector('.retry-btn');
 let tile;
 let box;
+// let obstacle;
+let obstacleRandRow;
+let obstacleRandCol;
 let target;
 let keyPress;
 let row;
@@ -17,7 +19,7 @@ for (let i = 0; i < arenaSize; i++) {
 
   for (let j = 0; j < arenaSize; j++) {
     tile = document.createElement('div');
-    tile.style.height = floorHeight / arenaSize / 1.1+ 'px';
+    tile.style.height = floorHeight / arenaSize / 1.1 + 'px';
     tile.style.width = floorWidth / arenaSize + 'px';
     tile.className = `tile`;
     tile.dataset.row = i;
@@ -28,7 +30,26 @@ for (let i = 0; i < arenaSize; i++) {
   floor.appendChild(rowDiv);
 }
 
+for (let i = 0; i < 10; i++) {
+  obstacle = document.createElement('div');
+  obstacleRandRow = Math.ceil(Math.random() * 10);
+  obstacleRandCol = Math.ceil(Math.random() * 10);
 
+  if (obstacleRandRow === 0 && obstacleRandCol === 0 ||
+      obstacleRandRow === arenaSize - 1 && obstacleRandCol === arenaSize - 1
+  ) {
+    continue;
+  }
+
+  obstacle.dataset.row = obstacleRandRow;
+  obstacle.dataset.col = obstacleRandCol;
+
+  // obstacle = document.querySelector(`[data-row="${obstacleRandRow}"][data-col="${obstacleRandCol}"]`);
+  obstacle = document.querySelector(`[data-row="1"][data-col="1"]`);
+
+  obstacle.classList.add('obstacle');
+  // break;
+}
 
 target = document.querySelector(`[data-row="${arenaSize-1}"][data-col="${arenaSize-1}"]`);
 target.classList.add('target');
@@ -41,39 +62,75 @@ col = Number(box.dataset.col);
 
 document.addEventListener('keydown', handleMove);
 
-// retryBtn.addEventListener('click', () => {
-//   location.reload();
-// });
-
 function handleMove(event) {
   keyPress = event.key;
   if (keyPress.includes('Arrow')) event.preventDefault();
 
   if (keyPress.includes('Right')) {
-    col === arenaSize - 1 ? col = col : col++;
+    const nextCol = col + 1;
+    if (nextCol >= arenaSize) return;
+
+    const nextTile = document.querySelector(`[data-row="${row}"][data-col="${nextCol}"]`);
+
+    if (nextTile.classList.contains('obstacle')) {
+      console.log("Obstacle blocking!");
+      return;
+    }
+
     box.classList.remove('box');
-    box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`)
+    col = nextCol;
+    box = nextTile;
     box.classList.add('box');
   }
 
   if (keyPress.includes('Left')) {
-    col === 0 ? col = col : col--;
+    const prevCol = col - 1;
+    if (prevCol < 0) return;
+
+    const prevTile = document.querySelector(`[data-row="${row}"][data-col="${prevCol}"]`);
+
+    if (prevTile.classList.contains('obstacle')) {
+      console.log("Obstacle blocking!");
+      return;
+    }
+
     box.classList.remove('box');
-    box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`)
+    col = prevCol;
+    box = prevTile;
     box.classList.add('box');
   }
 
   if (keyPress.includes('Up')) {
-    row === 0 ? row = row : row--;
+    const prevRow = row - 1;
+    if (prevRow < 0) return;
+
+    const prevTile = document.querySelector(`[data-row="${prevRow}"][data-col="${col}"]`);
+
+    if (prevTile.classList.contains('obstacle')) {
+      console.log("Obstacle blocking!");
+      return;
+    }
+
     box.classList.remove('box');
-    box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`)
+    row = prevRow;
+    box = prevTile;
     box.classList.add('box');
   }
 
   if (keyPress.includes('Down')) {
-    row === arenaSize - 1 ? row = row : row++;
+    const nextRow = row + 1;
+    if (nextRow < 0) return;
+
+    const nextTile = document.querySelector(`[data-row="${nextRow}"][data-col="${col}"]`);
+
+    if (nextTile.classList.contains('obstacle')) {
+      console.log("Obstacle blocking!");
+      return;
+    }
+
     box.classList.remove('box');
-    box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`)
+    row = nextRow;
+    box = nextTile;
     box.classList.add('box');
   }
 
