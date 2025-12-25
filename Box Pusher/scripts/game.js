@@ -33,10 +33,10 @@ function handleMove(event) {
   keyPress = event.key;
   if (keyPress.includes('Arrow')) event.preventDefault();
 
-  if (keyPress.includes('Right')) move(0, 1);
-  if (keyPress.includes('Left')) move(0, -1);
-  if (keyPress.includes('Up')) move(-1, 0);
-  if (keyPress.includes('Down')) move(1, 0);
+  if (keyPress === 'ArrowRight' || keyPress === 'd') move(0, 1);
+  if (keyPress === 'ArrowLeft' || keyPress === 'a') move(0, -1);
+  if (keyPress === 'ArrowUp' || keyPress === 'w') move(-1, 0);
+  if (keyPress === 'ArrowDown' || keyPress === 's') move(1, 0);
 }
 
 function move(dy, dx) {
