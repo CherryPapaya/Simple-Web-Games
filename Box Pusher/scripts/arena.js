@@ -1,7 +1,7 @@
 
 
 const floor = document.getElementById('floor');
-const floorHeight = floor.offsetHeight;
+// const floorHeight = floor.offsetHeight;
 const floorWidth = floor.offsetWidth;
 
 let tile;
@@ -27,7 +27,7 @@ export function buildArena(arenaSize) {
     floor.appendChild(rowDiv);
   }
 
-  for (let i = 0; i < arenaSize * 2; i++) {
+  for (let i = 0; i < arenaSize * 4; i++) {
     obstacleRandRow = Math.floor(Math.random() * arenaSize);
     obstacleRandCol = Math.floor(Math.random() * arenaSize);
 

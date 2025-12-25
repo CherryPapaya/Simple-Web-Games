@@ -28,16 +28,6 @@ function handleMove(event) {
   if (keyPress.includes('Left')) move(0, -1);
   if (keyPress.includes('Up')) move(-1, 0);
   if (keyPress.includes('Down')) move(1, 0);
-
-  if (box.dataset.row === target.dataset.row && box.dataset.col === target.dataset.col) {
-    document.removeEventListener('keydown', handleMove);
-    document.addEventListener('keydown', (event) => {
-      if (event.key === ('Enter')) location.reload();
-    });
-
-    target.classList.add('win-tile');
-    console.log('You win!');
-  }
 }
 
 function move(dy, dx) {
@@ -52,6 +42,10 @@ function move(dy, dx) {
 
   const nextTile = document.querySelector(`[data-row="${nextRow}"][data-col="${nextCol}"]`);
 
+  if (nextTile.classList.contains('target')) {
+    handleWin();
+  }
+
   if (nextTile.classList.contains('obstacle')) {
     console.log("Obstacle blocking!");
     return;
@@ -62,4 +56,14 @@ function move(dy, dx) {
   row = nextRow;
   box = nextTile;
   box.classList.add('box');
+}
+
+function handleWin() {
+  document.removeEventListener('keydown', handleMove);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === ('Enter')) location.reload();
+  });
+
+  target.classList.add('win-tile');
+  console.log('You win!');
 }
