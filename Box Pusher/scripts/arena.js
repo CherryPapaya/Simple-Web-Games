@@ -24,7 +24,9 @@ export function buildArena(arenaSize) {
     }
     floor.appendChild(rowDiv);
   }
+}
 
+export function generateObstacles(arenaSize) {
   for (let i = 0; i < arenaSize * 4; i++) {
     obstacleRandRow = Math.floor(Math.random() * arenaSize);
     obstacleRandCol = Math.floor(Math.random() * arenaSize);
@@ -41,10 +43,4 @@ export function buildArena(arenaSize) {
 
     obstacle.classList.add('obstacle');
   }
-
-  // target = document.querySelector(`[data-row="${arenaSize-1}"][data-col="${arenaSize-1}"]`);
-  // target.classList.add('target');
-
-  // box = document.querySelector('[data-row="0"][data-col="0"]');
-  // box.classList.add('box');
 }

@@ -1,27 +1,33 @@
-import { buildArena } from "./arena.js";
-// import { handleMove } from "./input.js";
+import { buildArena, generateObstacles } from "./arena.js";
 
 const arenaSize = Math.floor(Math.random() * 10) + 20;
 let box;
+let target;
 let keyPress;
 let row;
 let col;
 
-buildArena(arenaSize);
-// placePlayer();
-// placeTarget();
-// generateObstacles();
+startGame();
 
-const target = document.querySelector(`[data-row="${arenaSize-1}"][data-col="${arenaSize-1}"]`);
-target.classList.add('target');
+function startGame() {
+  buildArena(arenaSize);
+  placePlayer();
+  placeTarget();
+  generateObstacles(arenaSize);
+  document.addEventListener('keydown', handleMove);
+}
 
-box = document.querySelector('[data-row="0"][data-col="0"]');
-box.classList.add('box');
+function placePlayer() {
+  box = document.querySelector('[data-row="0"][data-col="0"]');
+  box.classList.add('box');
+  row = Number(box.dataset.row);
+  col = Number(box.dataset.col);
+}
 
-row = Number(box.dataset.row);
-col = Number(box.dataset.col);
-
-document.addEventListener('keydown', handleMove);
+function placeTarget() {
+  target = document.querySelector(`[data-row="${arenaSize-1}"][data-col="${arenaSize-1}"]`);
+  target.classList.add('target');
+}
 
 function handleMove(event) {
   keyPress = event.key;
