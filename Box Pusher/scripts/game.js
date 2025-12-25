@@ -30,25 +30,21 @@ for (let i = 0; i < arenaSize; i++) {
   floor.appendChild(rowDiv);
 }
 
-for (let i = 0; i < 10; i++) {
-  obstacle = document.createElement('div');
-  obstacleRandRow = Math.ceil(Math.random() * 10);
-  obstacleRandCol = Math.ceil(Math.random() * 10);
+for (let i = 0; i < 20; i++) {
+  obstacleRandRow = Math.floor(Math.random() * arenaSize);
+  obstacleRandCol = Math.floor(Math.random() * arenaSize);
 
-  if (obstacleRandRow === 0 && obstacleRandCol === 0 ||
-      obstacleRandRow === arenaSize - 1 && obstacleRandCol === arenaSize - 1
+  if ((obstacleRandRow === 0 && obstacleRandCol === 0) ||
+      (obstacleRandRow === arenaSize - 1 && obstacleRandCol === arenaSize - 1)
   ) {
     continue;
   }
 
-  obstacle.dataset.row = obstacleRandRow;
-  obstacle.dataset.col = obstacleRandCol;
+  obstacle = document.querySelector(`[data-row="${obstacleRandRow}"][data-col="${obstacleRandCol}"]`);
 
-  // obstacle = document.querySelector(`[data-row="${obstacleRandRow}"][data-col="${obstacleRandCol}"]`);
-  obstacle = document.querySelector(`[data-row="1"][data-col="1"]`);
+  if (!obstacle) continue;
 
   obstacle.classList.add('obstacle');
-  // break;
 }
 
 target = document.querySelector(`[data-row="${arenaSize-1}"][data-col="${arenaSize-1}"]`);
@@ -119,7 +115,7 @@ function handleMove(event) {
 
   if (keyPress.includes('Down')) {
     const nextRow = row + 1;
-    if (nextRow < 0) return;
+    if (nextRow >= arenaSize) return;
 
     const nextTile = document.querySelector(`[data-row="${nextRow}"][data-col="${col}"]`);
 
