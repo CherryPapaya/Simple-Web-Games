@@ -123,8 +123,7 @@ button {
 
 .confirm-msg-wrapper {
   display: flex;
-  column-count: 3;
-  column-gap: .5rem;
+  column-gap: 1rem;
   justify-content: center;
   align-items: center;
 }
