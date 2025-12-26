@@ -121,6 +121,18 @@ button {
   margin: 0 1rem;
 }
 
+.confirm-msg-wrapper {
+  display: flex;
+  column-count: 3;
+  column-gap: .5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-msg-wrapper-margin {
+  margin-bottom: 1.3rem;
+}
+
 .wins, .losses, .ties {
   margin-top: .5rem;
   font-weight: bold;

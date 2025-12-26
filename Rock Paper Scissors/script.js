@@ -10,10 +10,37 @@ showScore();
 
 const playerMoveIcon = document.querySelector('.player-move');
 const computerMoveIcon = document.querySelector('.computer-move');
-const autoPlayBtn = document.querySelector('.autoplay-btn');
 const gameCounter = document.querySelector('.game-counter');
+const rockBtn = document.querySelector('.js-rock-btn');
+const paperBtn = document.querySelector('.js-paper-btn');
+const scissorsBtn = document.querySelector('.js-scissors-btn');
+const confirmMsgWrapper = document.querySelector('.confirm-msg-wrapper');
+const resetBtn = document.querySelector('.reset-btn');
+const autoPlayBtn = document.querySelector('.autoplay-btn');
 
 let isAutoPlaying = false;
+
+document.addEventListener('keydown', (event) => {
+  const keyPress = event.key;
+  
+  if (keyPress === 'r') {
+    playGame('rock');
+  } else if (keyPress === 'p') {
+    playGame('paper');
+  } else if (keyPress === 's') {
+    playGame('scissors');
+  } else if (keyPress === 'a') {
+    autoPlayBtn.click();
+  } else if (keyPress === 'Backspace') {
+    resetScore();
+  }
+});
+
+rockBtn.addEventListener('click', () => playGame('rock'));
+paperBtn.addEventListener('click', () => playGame('paper'));
+scissorsBtn.addEventListener('click', () => playGame('scissors'));
+resetBtn.addEventListener('click', () => resetScore());
+
 
 autoPlayBtn.addEventListener('click', () => {
   isAutoPlaying = !isAutoPlaying;
@@ -120,20 +147,37 @@ function pickComputerMove() {
 }
 
 function resetScore() {
-  score = {
-    wins: 0,
-    losses: 0,
-    ties: 0
-  };
-
-  numOfGames = 0;
-
-  localStorage.setItem('score', JSON.stringify(score));
-  localStorage.setItem('numOfGames', numOfGames);
-
-  showResult('&#9994', '&#9994', '&#160;')
-  showScore();
-  gameCounter.innerHTML = `Game ${numOfGames}`;
+  confirmMsgWrapper.innerHTML = `
+    <p class="js-confirm-msg">Are you sure you want to reset the score?</p>
+    <button class="control-btn js-yes-reset">Yes</button>
+    <button class="control-btn js-no-reset">No</button>
+  `;
+  
+  confirmMsgWrapper.classList.add('confirm-msg-wrapper-margin');
+  
+  document.querySelector('.js-yes-reset').addEventListener('click', () => {
+    score = {
+      wins: 0,
+      losses: 0,
+      ties: 0
+    };
+  
+    numOfGames = 0;
+  
+    localStorage.setItem('score', JSON.stringify(score));
+    localStorage.setItem('numOfGames', numOfGames);
+  
+    showResult('&#9994', '&#9994', '&#160;')
+    showScore();
+    gameCounter.innerHTML = `Game ${numOfGames}`;
+    confirmMsgWrapper.innerHTML = '';
+    confirmMsgWrapper.classList.remove('confirm-msg-wrapper-margin');
+  });
+  
+  document.querySelector('.js-no-reset').addEventListener('click', () => {
+    confirmMsgWrapper.innerHTML = '';
+    confirmMsgWrapper.classList.remove('confirm-msg-wrapper-margin');
+  });
 }
 
 function showScore() {

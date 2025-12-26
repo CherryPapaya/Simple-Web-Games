@@ -70,7 +70,7 @@ function move(dy, dx) {
 function handleWin() {
   document.removeEventListener('keydown', handleMove);
   document.addEventListener('keydown', (event) => {
-    if (event.key === ('Enter')) location.reload();
+    if (event.key === ('Enter') || event.code === ('Space')) location.reload();
   });
 
   target.classList.add('win-tile');

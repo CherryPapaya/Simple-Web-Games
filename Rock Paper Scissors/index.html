@@ -14,17 +14,11 @@
     <h4 class="pick-move-text">Pick a move</h4>
 
     <div class="player-btns-container">
-      <button class="player-move-btn" onclick="
-        playGame('rock');
-      ">&#9994</button>
+      <button class="player-move-btn js-rock-btn">&#9994</button>
 
-      <button class="player-move-btn" onclick="
-        playGame('paper');
-      ">&#9995</button>
+      <button class="player-move-btn js-paper-btn">&#9995</button>
 
-      <button class="player-move-btn" onclick="
-        playGame('scissors');
-      ">&#9996</button>
+      <button class="player-move-btn js-scissors-btn">&#9996</button>
     </div>
 
     <h1 class="game-counter">Game 0</h1>
@@ -65,16 +59,13 @@
         <p class="ties"></p>
       </div>
     </div>
+    
+    <div class="confirm-msg-wrapper"></div>
 
     <div class="buttons-container">
-      <button class="reset-btn control-btn" onclick="
-        resetScore();
-      ">Reset</button>
+      <button class="reset-btn control-btn">Reset</button>
 
-      <button class="autoplay-btn control-btn" onclick="
-        autoPlay();
-      ">Auto Play</button>
-
+      <button class="autoplay-btn control-btn">Auto Play</button>
     </div>
   </body>
 </html>

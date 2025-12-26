@@ -17,27 +17,28 @@ main {
   font-size: 1.5rem;
 }
 
-.game-screen {
-  /* height: 100vh; */
+/* .game-screen {
+  height: 100vh;
   width: 50%;
   aspect-ratio: 1 / 1;
-}
+} */
 
-@media (max-width: 768px) {
-  .game-screen {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-  }
-}
 
 .floor {
   /* height: 100%; */
-  width: 100%;
+  width: 50%;
   aspect-ratio: 1 / 1;
   padding: 1rem;
-  background-color: aquamarine;
+  background-color: lightgray;
   justify-self: center;
   align-content: center;
+}
+
+@media (max-width: 768px) {
+  .floor {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
 }
 
 .row {
@@ -55,7 +56,7 @@ main {
 }
 
 .obstacle {
-  background-color: lightgrey;
+  background-color: lightgray;
 }
 
 .target {
