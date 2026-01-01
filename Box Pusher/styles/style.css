@@ -60,7 +60,8 @@ main {
 }
 
 .target {
-  background-color: yellow
+  background-color: yellow;
+  z-index: 1;
 }
 
 @keyframes rainbow {
@@ -70,7 +71,7 @@ main {
   48% {background-color: green;}
   64% {background-color: blue;}
   80% {background-color: indigo;}
-  100% {background-color: violet;}
+  96% {background-color: violet;}
 }
 
 .win-tile {

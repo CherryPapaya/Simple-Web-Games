@@ -26,6 +26,7 @@ export function buildArena(arenaSize) {
   }
 }
 
+// Implment BFS to avoid layouts where target is unreachable
 export function generateObstacles(arenaSize) {
   for (let i = 0; i < arenaSize * 4; i++) {
     obstacleRandRow = Math.floor(Math.random() * arenaSize);
