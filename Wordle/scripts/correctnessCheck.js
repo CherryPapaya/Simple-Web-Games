@@ -1,6 +1,7 @@
-function runCheck(guess, word) {
+function runCheck(guess, word, row) {
   if (guess === word) {
     console.log('Correct');
+    renderCheck(['/', '/', '/', '/', '/'], row);
     return true;
   }
   
@@ -12,6 +13,7 @@ function runCheck(guess, word) {
     if (wordChars[index] === char) {
       guessChars[index] = '/';
       wordChars[index] = '/'
+      col++
     }
   });
   
@@ -22,6 +24,7 @@ function runCheck(guess, word) {
     if (wordChars.includes(char)) {
       guessChars[index] = '~';
       replaceWithTilde(wordChars, char);
+      col++;
     }
   });
   
@@ -30,6 +33,8 @@ function runCheck(guess, word) {
     
     guessChars[index] = 'X';
   });
+  
+  renderCheck(guessChars, row);
   
   console.log(guessChars);
 }
@@ -43,4 +48,18 @@ function toArray(word) {
 function replaceWithTilde(charArray, char) {
   const index = charArray.indexOf(char);
   charArray[index] = '~';
+}
+
+function renderCheck(charArray, row) {
+  let box;
+  
+  charArray.forEach((char, index) => {
+    box = document.querySelector(`[data-row="${row}"][data-col="${index}"]`);
+    
+    if (char === '/') {
+      box.classList.add('correct');
+    } else if (char === '~') {
+      box.classList.add('partial');
+    }
+  });
 }

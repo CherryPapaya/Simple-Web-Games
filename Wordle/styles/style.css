@@ -7,3 +7,11 @@
 .row {
   display: flex;
 }
+
+.correct {
+  background-color: green;
+}
+
+.partial {
+  background-color: yellow;
+}
