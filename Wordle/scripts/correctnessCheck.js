@@ -5,8 +5,8 @@ function runCheck(guess, word, row) {
     return true;
   }
   
-  const guessChars = toArray(guess);
-  const wordChars = toArray(word);
+  const guessChars = toCharArray(guess);
+  const wordChars = toCharArray(word);
     
   // Prioritize perfect matches first
   guessChars.forEach((char, index) => {    
@@ -39,7 +39,7 @@ function runCheck(guess, word, row) {
   console.log(guessChars);
 }
 
-function toArray(word) {
+function toCharArray(word) {
   const charArray = word.split('');
   // console.log(charArray);
   return charArray;
@@ -60,6 +60,8 @@ function renderCheck(charArray, row) {
       box.classList.add('correct');
     } else if (char === '~') {
       box.classList.add('partial');
+    } else if (char === 'X') {
+      box.classList.add('wrong');
     }
   });
 }

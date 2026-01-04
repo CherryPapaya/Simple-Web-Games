@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wordle</title>
   
-  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/general.css">
+  <link rel="stylesheet" href="styles/grid.css">
   
   <script defer src="scripts/grid.js"></script>
   <script defer src="scripts/randomWord.js"></script>
@@ -14,7 +15,47 @@
   <script defer src="scripts/program.js"></script>
 </head>
 <body>
-  <p class="word js-word"></p>
-  <div class="grid js-grid"></div>
+  
+  <main>
+    <pre class="word js-word"> </pre>
+    <div class="grid js-grid"></div>
+    
+    <div class="keyboard js-keyboard">
+      <div class="keyboard-row js-keyboard-row">
+        <div class="key js-key">Q</div>
+        <div class="key js-key">W</div>
+        <div class="key js-key">E</div>
+        <div class="key js-key">R</div>
+        <div class="key js-key">T</div>
+        <div class="key js-key">Y</div>
+        <div class="key js-key">U</div>
+        <div class="key js-key">I</div>
+        <div class="key js-key">O</div>
+        <div class="key js-key">P</div>
+      </div>
+      
+      <div class="keyboard-row js-keyboard-row">
+        <div class="key js-key">A</div>
+        <div class="key js-key">S</div>
+        <div class="key js-key">D</div>
+        <div class="key js-key">F</div>
+        <div class="key js-key">G</div>
+        <div class="key js-key">H</div>
+        <div class="key js-key">J</div>
+        <div class="key js-key">K</div>
+        <div class="key js-key">L</div>
+      </div>
+      
+      <div class="keyboard-row js-keyboard-row">
+        <div class="key js-key">Z</div>
+        <div class="key js-key">X</div>
+        <div class="key js-key">C</div>
+        <div class="key js-key">V</div>
+        <div class="key js-key">B</div>
+        <div class="key js-key">N</div>
+        <div class="key js-key">M</div>
+      </div>
+    </div>
+  </main>
 </body>
 </html>

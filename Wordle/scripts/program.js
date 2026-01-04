@@ -4,18 +4,15 @@ let word;
 let guess = '';
 let row = 0;
 let col = 0;
+let usedLetters = [];
+const wordElement = document.querySelector('.js-word');
 
 generateGrid();
 getWord();
 
 document.addEventListener('keydown', registerKey);
 
-function registerKey(event) {
-  if (row + 1 > 6) {
-    document.removeEventListener('keydown', registerKey);
-    return;
-  }
-  
+function registerKey(event) {  
   const keyPress = event.key;
   const keyPressUpperCase = keyPress.toUpperCase();
   
@@ -23,7 +20,15 @@ function registerKey(event) {
   
   if (keyPress === 'Enter') {
     console.log(row);
+    
     if (guess.length === 5) {
+      
+      for (let i = 0; i < 5; i++) {
+        const letter = toCharArray(guess)[i];
+        if (!usedLetters.includes(letter)) usedLetters.push(letter);
+      }
+      
+      console.log(usedLetters);
       console.log(guess);
       const success = runCheck(guess, word, row);
       // runCheck(guess, word, row);
@@ -35,14 +40,21 @@ function registerKey(event) {
       guess = '';
       row++;
       col = 0;
+      
+      if (row + 1 > 6) {
+        wordElement.innerHTML = word;
+        document.removeEventListener('keydown', registerKey);
+        return;
+      }
     }
-    // return;
   } else if (keyPress === 'Backspace') {
     if (col - 1 >= 0) {
       guess = guess.slice(0, -1);
       document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).innerHTML = '';
       col--;
     }
+  } else if (!(event.keyCode >= 65 && event.keyCode <= 90)) {
+    return;
   } else if (col < 5) {
     guess += keyPressUpperCase;
     box.innerHTML = keyPressUpperCase;

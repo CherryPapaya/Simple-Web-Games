@@ -1,0 +1,32 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: .4rem;
+  margin-bottom: 1rem;
+}
+
+.box {
+  display: flex;
+  height: 3.3rem;
+  aspect-ratio: 1 / 1;
+  border: 1px solid rgb(79, 79, 79);
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.row {
+  display: flex;
+}
+
+.correct {
+  background-color: green;
+}
+
+.partial {
+  background-color: rgb(157, 151, 28);
+}
+
+.wrong {
+  background-color: rgb(47, 47, 47);
+}
