@@ -18,14 +18,14 @@ function runCheck(guess, word, row) {
     }
   });
   
-  // Then check for partial match
+  // Then check for presence
   guessChars.forEach((char, index) => {
     if (char === '/') return;
     
     if (wordChars.includes(char)) {
       guessChars[index] = '~';
       replaceWithTilde(wordChars, char);
-      document.querySelector(`[data-key="${char}"]`).classList.add('partial');
+      document.querySelector(`[data-key="${char}"]`).classList.add('present');
       col++;
     }
   });
@@ -34,7 +34,7 @@ function runCheck(guess, word, row) {
     if (char === '~' || char === '/') return;
     
     guessChars[index] = 'X';
-    document.querySelector(`[data-key="${char}"]`).classList.add('wrong');
+    document.querySelector(`[data-key="${char}"]`).classList.add('absent');
   });
   
   renderCheck(guessChars, row);
@@ -62,9 +62,9 @@ function renderCheck(charArray, row) {
     if (char === '/') {
       box.classList.add('correct');
     } else if (char === '~') {
-      box.classList.add('partial');
+      box.classList.add('present');
     } else if (char === 'X') {
-      box.classList.add('wrong');
+      box.classList.add('absent');
     }
   });
 }

@@ -35,10 +35,10 @@
   background-color: green;
 }
 
-.partial {
+.present {
   background-color: rgb(157, 151, 28);
 }
 
-.wrong {
+.absent {
   background-color: rgb(47, 47, 47);
 }

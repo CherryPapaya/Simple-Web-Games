@@ -48,7 +48,7 @@ async function registerKey(event) {
             return;
           }
         } else {
-          document.querySelector('.js-grid-row').classList.add('grid-row-shake');
+          document.querySelector(`[data-grid-row="${row}"]`).classList.add('grid-row-shake');
           wordElement.innerHTML = 'Invalid word!';
           wordElement.classList.add('invalid-word-msg');
           clearTimeout(timeoutIdMsg);
@@ -59,7 +59,7 @@ async function registerKey(event) {
           }, 3000);
           
           setTimeout(() => {
-            document.querySelector('.js-grid-row').classList.remove('grid-row-shake');
+            document.querySelector(`[data-grid-row="${row}"]`).classList.remove('grid-row-shake');
           }, 500);
         }
       });
