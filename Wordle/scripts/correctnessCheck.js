@@ -13,6 +13,7 @@ function runCheck(guess, word, row) {
     if (wordChars[index] === char) {
       guessChars[index] = '/';
       wordChars[index] = '/'
+      document.querySelector(`[data-key="${char}"]`).classList.add('correct');
       col++
     }
   });
@@ -24,6 +25,7 @@ function runCheck(guess, word, row) {
     if (wordChars.includes(char)) {
       guessChars[index] = '~';
       replaceWithTilde(wordChars, char);
+      document.querySelector(`[data-key="${char}"]`).classList.add('partial');
       col++;
     }
   });
@@ -32,11 +34,12 @@ function runCheck(guess, word, row) {
     if (char === '~' || char === '/') return;
     
     guessChars[index] = 'X';
+    document.querySelector(`[data-key="${char}"]`).classList.add('wrong');
   });
   
   renderCheck(guessChars, row);
   
-  console.log(guessChars);
+  console.log(guessChars); 
 }
 
 function toCharArray(word) {

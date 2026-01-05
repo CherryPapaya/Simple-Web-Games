@@ -1,4 +1,11 @@
 async function checkIfValidWord(word) {
-  const url = `https://wordsapiv1.p.mashape.com/words/${word}/definitions`;
+  const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
   
+  const response = await fetch(url);
+  
+  if (!response.ok) {
+    return false;
+  } else {
+    return true;
+  }
 }

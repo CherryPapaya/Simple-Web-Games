@@ -1,7 +1,8 @@
 .grid {
-  display: grid;
-  grid-template-columns: repeat(5, auto);
-  gap: .4rem;
+  display: flex;
+  flex-direction: column;
+  /* grid-template-columns: repeat(5, auto);
+  gap: .4rem; */
   margin-bottom: 1rem;
 }
 
@@ -15,8 +16,19 @@
   font-size: 2rem;
 }
 
-.row {
+.grid-row {
   display: flex;
+  margin-bottom: .4rem;
+  column-gap: .4rem;
+}
+
+@keyframes shake {
+  33% { transform: translateX(.3rem); }
+  66% { transform: translatex(-.2rem);}
+}
+
+.grid-row-shake {
+  animation: shake .2s 3 ease-in-out;
 }
 
 .correct {
