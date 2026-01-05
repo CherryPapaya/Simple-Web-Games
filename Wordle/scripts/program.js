@@ -89,5 +89,4 @@ function runInvalidEvent() {
 
 function runEndgame() {
   document.removeEventListener('keydown', registerKey);
-  return;
 }
