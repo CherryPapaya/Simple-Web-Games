@@ -1,6 +1,5 @@
 function runCheck(guess, word, row) {
   if (guess === word) {
-    console.log('Correct');
     renderCheck(['/', '/', '/', '/', '/'], row);
     return true;
   }
@@ -38,13 +37,11 @@ function runCheck(guess, word, row) {
   });
   
   renderCheck(guessChars, row);
-  
-  console.log(guessChars); 
+  return false;
 }
 
 function toCharArray(word) {
   const charArray = word.split('');
-  // console.log(charArray);
   return charArray;
 }
 

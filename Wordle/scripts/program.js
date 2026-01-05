@@ -1,6 +1,4 @@
 let word;
-// let word = 'TASTE';
-// console.log(`Word: ${word}`)
 let guess = '';
 let row = 0;
 let col = 0;
@@ -18,70 +16,78 @@ async function registerKey(event) {
   const keyPressUpperCase = keyPress.toUpperCase();
   
   const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-  
-  // CLEANUP
-  
+
   if (keyPress === 'Enter') {
     if (guess.length === 5) {
-      checkIfValidWord(guess).then(isValid => {
-        if (isValid) {
-          for (let i = 0; i < 5; i++) {
-            const letter = toCharArray(guess)[i];
-            if (!usedLetters.includes(letter)) usedLetters.push(letter);
-          }
-          
-          console.log(usedLetters);
-          console.log(guess);
-          const correct = runCheck(guess, word, row);
-          
-          if (correct) {
-            wordElement.innerHTML = 'YAY';
-            document.removeEventListener('keydown', registerKey);
-            return;
-          }
-          
-          guess = '';
-          row++;
-          col = 0;
-          
-          if (row + 1 > 6) {
-            wordElement.innerHTML = word;
-            document.removeEventListener('keydown', registerKey);
-            return;
-          }
-        } else {
-          document.querySelector(`[data-grid-row="${row}"]`).classList.add('grid-row-shake');
-          wordElement.innerHTML = 'Invalid word!';
-          wordElement.classList.add('invalid-word-msg');
-          clearTimeout(timeoutIdMsg);
-          
-          timeoutIdMsg = setTimeout(() => {
-            wordElement.classList.remove('invalid-word-msg');
-            wordElement.innerHTML = ' ';
-          }, 3000);
-          
-          setTimeout(() => {
-            document.querySelector(`[data-grid-row="${row}"]`).classList.remove('grid-row-shake');
-          }, 500);
-        }
-      });
+      const isValid = await checkIfValidWord(guess);
+      
+      if (isValid) {
+        processGuess(guess);
+      } else {
+        runInvalidEvent();
+      }
     }
-  } else if (keyPress === 'Backspace') {
+  }
+  
+  if (keyPress === 'Backspace') {
     if (col - 1 >= 0) {
       guess = guess.slice(0, -1);
       document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).innerHTML = '';
       col--;
     }
-  } else if (!(event.keyCode >= 65 && event.keyCode <= 90)) {
-    return;
-  } else if (col < 5) {
-    guess += keyPressUpperCase;
-    box.innerHTML = keyPressUpperCase;
-    col++;
   }
+  
+  if (!(event.keyCode >= 65 && event.keyCode <= 90)) return;
+  if (col >= 5) return; 
+  
+  guess += keyPressUpperCase;
+  box.innerHTML = keyPressUpperCase;
+  col++;
 }
 
 async function getWord() {
   word = await getRandomWord();
   console.log(`Word: ${word}`);
+}
+
+function processGuess(userGuess) {
+  for (let i = 0; i < 5; i++) {
+    const letter = toCharArray(userGuess)[i];
+    if (!usedLetters.includes(letter)) usedLetters.push(letter);
+  }
+  
+  const isCorrect = runCheck(userGuess, word, row);
+  
+  if (isCorrect) {
+    wordElement.innerHTML = 'YAY';
+    runEndgame();
+  } else if (row === 5) {
+    wordElement.innerHTML = word;
+    runEndgame();
+  }
+  
+  guess = '';
+  row++;
+  col = 0;
+}
+
+function runInvalidEvent() {
+  document.querySelector(`[data-grid-row="${row}"]`).classList.add('grid-row-shake');
+  wordElement.innerHTML = 'Invalid word!';
+  wordElement.classList.add('invalid-word-msg');
+  clearTimeout(timeoutIdMsg);
+  
+  timeoutIdMsg = setTimeout(() => {
+    wordElement.classList.remove('invalid-word-msg');
+    wordElement.innerHTML = ' ';
+  }, 3000);
+  
+  setTimeout(() => {
+    document.querySelector(`[data-grid-row="${row}"]`).classList.remove('grid-row-shake');
+  }, 500);
+}
+
+function runEndgame() {
+  document.removeEventListener('keydown', registerKey);
+  return;
 }

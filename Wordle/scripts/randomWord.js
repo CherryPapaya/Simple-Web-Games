@@ -4,6 +4,5 @@ async function getRandomWord() {
   const response = await fetch(url);
   const result = await response.json();
   const word = result[0];
-  // console.log(word);
   return word;
 }
