@@ -19,6 +19,8 @@ async function registerKey(event) {
   
   const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
   
+  // CLEANUP
+  
   if (keyPress === 'Enter') {
     if (guess.length === 5) {
       checkIfValidWord(guess).then(isValid => {
