@@ -1,4 +1,6 @@
 function runCheck(guess, word, row) {
+  const lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
+  
   if (guess === word) {
     renderCheck(['/', '/', '/', '/', '/'], row);
     return true;
@@ -12,7 +14,9 @@ function runCheck(guess, word, row) {
     if (wordChars[index] === char) {
       guessChars[index] = '/';
       wordChars[index] = '/'
-      document.querySelector(`[data-key="${char}"]`).classList.add('correct');
+      lastBox.addEventListener('animationend', () => {
+        document.querySelector(`[data-key="${char}"]`).classList.add('correct');
+      });
       col++
     }
   });
@@ -24,7 +28,9 @@ function runCheck(guess, word, row) {
     if (wordChars.includes(char)) {
       guessChars[index] = '~';
       replaceWithTilde(wordChars, char);
-      document.querySelector(`[data-key="${char}"]`).classList.add('present');
+      lastBox.addEventListener('animationend', () => {
+        document.querySelector(`[data-key="${char}"]`).classList.add('present');
+      });
       col++;
     }
   });
@@ -33,7 +39,9 @@ function runCheck(guess, word, row) {
     if (char === '~' || char === '/') return;
     
     guessChars[index] = 'X';
-    document.querySelector(`[data-key="${char}"]`).classList.add('absent');
+    lastBox.addEventListener('animationend', () => {
+      document.querySelector(`[data-key="${char}"]`).classList.add('absent');
+    });
   });
   
   renderCheck(guessChars, row);
