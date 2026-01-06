@@ -5,7 +5,8 @@ let col = 0;
 let usedLetters = []; // should be Map (correctness, char);
 let timeoutIdMsg;
 let lastBox;
-let actionAllowed = true;
+let backspaceAllowed = true;
+let keyPressAllowed = true;
 const keys = document.querySelectorAll('.js-key');
 const wordElement = document.querySelector('.js-word');
 // let flipTimeoutIds;
@@ -14,11 +15,11 @@ getWord();
 generateGrid();
 
 document.addEventListener('keyup', (event) => {
-  if (event.key === 'Backspace') actionAllowed = true;
+  if (event.key === 'Backspace') backspaceAllowed = true;
 })
 
 document.addEventListener('pointerup', () => {
-  actionAllowed = true;
+  backspaceAllowed = true;
 })
 
 keys.forEach(key => {
@@ -40,44 +41,52 @@ function handleVirtualKey(event) {
 }
 
 async function registerKey(keyPress) {
-  const gridRow = document.querySelector(`[data-grid-row="${row}"]`);
-  const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-
-  if (keyPress === 'ENTER') {
-    if (guess.length === 5) {
-      const isValid = await checkIfValidWord(guess);
-      
-      if (!isValid) {
-        runInvalidEvent(gridRow, true);
-        return;
-      }
-      
-      startAnimation('flip', row);
-      processGuess(guess);
-    } else {
-      runInvalidEvent(gridRow, false);
-    }
-  }
+  if (keyPressAllowed) {
+    const gridRow = document.querySelector(`[data-grid-row="${row}"]`);
+    const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
   
-  if (keyPress === 'BACKSPACE') {
-    if (actionAllowed) {
-      if (col - 1 >= 0) {
-        guess = guess.slice(0, -1);
-        document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).innerHTML = '';
-        document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).classList.remove('pulse');
-        col--;
-        actionAllowed = false;
+    if (keyPress === 'ENTER') {
+      if (guess.length === 5) {
+        keyPressAllowed = false;
+        lastBox = document.querySelector(`[data-row="${row}"][data-col="4"]`);
+        
+        const isValid = await checkIfValidWord(guess);
+        
+        if (!isValid) {
+          runInvalidEvent(gridRow, true);
+          return;
+        }
+        
+        startAnimation('flip', row);
+        processGuess(guess);
+        lastBox.addEventListener('animationend', () => {
+          keyPressAllowed = true;
+        });
+      } else {
+        runInvalidEvent(gridRow, false);
       }
     }
+    
+    if (keyPress === 'BACKSPACE') {
+      if (backspaceAllowed) {
+        if (col - 1 >= 0) {
+          guess = guess.slice(0, -1);
+          document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).innerHTML = '';
+          document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).classList.remove('pulse');
+          col--;
+          backspaceAllowed = false;
+        }
+      }
+    }
+    
+    if (keyPress.length > 1 || !(/^[A-Z]/.test(keyPress))) return;
+    if (col >= 5) return; 
+    
+    guess += keyPress;
+    box.classList.add('pulse');
+    box.innerHTML = keyPress;
+    col++;
   }
-  
-  if (keyPress.length > 1 || !(/^[A-Z]/.test(keyPress))) return;
-  if (col >= 5) return; 
-  
-  guess += keyPress;
-  box.classList.add('pulse');
-  box.innerHTML = keyPress;
-  col++;
 }
 
 async function getWord() {
