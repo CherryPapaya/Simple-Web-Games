@@ -90,7 +90,9 @@ async function registerKey(keyPress) {
 }
 
 async function getWord() {
-  word = await getRandomWord();
+  word = localStorage.getItem('word', word) || await getRandomWord();
+  // word = await getRandomWord();
+  localStorage.setItem('word', word);
   console.log(`Word: ${word}`);
 }
 
@@ -150,6 +152,8 @@ function runEndgame() {
     key.removeEventListener('click', handleVirtualKey);
   });
   document.removeEventListener('keydown', handlePhysicalKey);
+  
+  localStorage.clear();
 }
 
 function startAnimation(type, row) {
