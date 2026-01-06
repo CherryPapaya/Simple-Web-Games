@@ -29,16 +29,19 @@
   animation: shake .2s 3 ease-in-out;
 }
 
-.correct {
-  background-color: green;
+.absent {
+  background-color: rgb(47, 47, 47);
+  border: 1px solid rgb(47, 47, 47) !important;
 }
 
 .present {
   background-color: rgb(157, 151, 28);
+  border: 1px solid rgb(157, 151, 28) !important;
 }
 
-.absent {
-  background-color: rgb(47, 47, 47);
+.correct {
+  background-color: green;
+  border: 1px solid green !important;
 }
 
 @keyframes pulse {

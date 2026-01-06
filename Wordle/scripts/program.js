@@ -4,6 +4,7 @@ let row = 0;
 let col = 0;
 let usedLetters = [];
 let timeoutIdMsg;
+let lastBox;
 // let flipTimeoutIds;
 const wordElement = document.querySelector('.js-word');
 
@@ -18,6 +19,7 @@ async function registerKey(event) {
   
   const gridRow = document.querySelector(`[data-grid-row="${row}"]`);
   const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+  lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
 
   if (keyPress === 'Enter') {
     if (guess.length === 5) {
@@ -60,15 +62,17 @@ async function getWord() {
 function processGuess(guessToProcess) {
   updateUsedLetters(guessToProcess);
   
-  const isCorrect = runCheck(guessToProcess, word, row);
+  const isCorrect = runCheck(guessToProcess, word, row, lastBox);
   
   if (isCorrect) {
-    document.querySelector(`[data-row="${row}"][data-col="4"]`).addEventListener('animationend', () => {
+    lastBox.addEventListener('animationend', () => {
       wordElement.innerHTML = '&#10024; YAY &#10024;';
     });
     runEndgame();
   } else if (row === 5) {
-    wordElement.innerHTML = word;
+    lastBox.addEventListener('animationend', () => {
+      wordElement.innerHTML = word;
+    });
     runEndgame();
   }
   
@@ -112,7 +116,7 @@ function startFlipAnimation(row) {
       document
         .querySelector(`[data-row="${row}"][data-col="${i}"]`)
         .classList.add('flip');
-    }, 300 * (i));
+    }, 350 * (i));
 
     // flipTimeoutIds.push(id);
   }
