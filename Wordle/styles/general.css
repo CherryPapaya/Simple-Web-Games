@@ -21,24 +21,36 @@ main {
   flex-direction: column;
   align-items: center;
   gap: .5rem;
+  width: 100%;
+  max-width: 500px;
 }
 
 .keyboard-row {
   display: flex;
-  gap: .5rem;
+  gap: .4rem;
+  width: 100%;
+  justify-content: center;
 }
 
 .key {
-  height: 4rem;
-  aspect-ratio: 1 / 1.4;
+  flex: 1;
+  max-width: 2.5rem;
+  height: 3.5rem;
+  
   border: none;
   color: white;
   background-color: gray;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
   border-radius: .3rem;
+  overflow: visible;
   
   cursor: pointer;
+}
+
+.key-long {
+  max-width: 3.9rem;
+  font-size: .65rem;
 }
 
 .key-absent {

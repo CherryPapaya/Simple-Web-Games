@@ -2,57 +2,125 @@ let word;
 let guess = '';
 let row = 0;
 let col = 0;
-let usedLetters = [];
+let usedLetters = []; // should be Map (correctness, char);
 let timeoutIdMsg;
 let lastBox;
-// let flipTimeoutIds;
+let actionAllowed = true;
+const keys = document.querySelectorAll('.js-key');
 const wordElement = document.querySelector('.js-word');
+// let flipTimeoutIds;
 
 getWord();
 generateGrid();
 
-document.addEventListener('keydown', registerKey);
+document.addEventListener('keyup', (event) => {
+  if (event.key === 'Backspace') actionAllowed = true;
+})
 
-async function registerKey(event) {  
-  const keyPress = event.key;
-  const keyPressUpperCase = keyPress.toUpperCase();
+document.addEventListener('pointerup', () => {
+  actionAllowed = true;
+})
+
+document.addEventListener('keydown', (event) => {
+  const keyPress = event.key.toUpperCase();
+  document.querySelector(`[data-key="${keyPress}"]`).click();
+});
+
+keys.forEach(key => {
+  const keyValue = key.dataset.key;
   
+  // key.addEventListener('click', handleKeyClick);
+  key.addEventListener('click', () => {
+    registerKey(keyValue);
+  })
+});
+
+// function handleKeyClick(key) {
+//   registerKey(keyValue);
+//   const keyValue = key.innerHTML;
+// }
+
+async function registerKey(keyPress) {
   const gridRow = document.querySelector(`[data-grid-row="${row}"]`);
   const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-  lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
 
-  if (keyPress === 'Enter') {
+  if (keyPress === 'ENTER') {
     if (guess.length === 5) {
       const isValid = await checkIfValidWord(guess);
       
       if (!isValid) {
-        // cancelFlipAnimation(row);
-        runInvalidEvent(gridRow);
+        runInvalidEvent(gridRow, true);
         return;
       }
+      
       startFlipAnimation(row);
       processGuess(guess);
+    } else {
+      runInvalidEvent(gridRow, false);
     }
   }
   
-  if (keyPress === 'Backspace') {
-    if (event.repeat) return;
-    if (col - 1 >= 0) {
-      guess = guess.slice(0, -1);
-      document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).innerHTML = '';
-      document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).classList.remove('pulse');
-      col--;
+  if (keyPress === 'BACKSPACE') {
+    if (actionAllowed) {
+      if (col - 1 >= 0) {
+        guess = guess.slice(0, -1);
+        document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).innerHTML = '';
+        document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).classList.remove('pulse');
+        col--;
+        actionAllowed = false;
+      }
     }
   }
   
-  if (!(event.keyCode >= 65 && event.keyCode <= 90)) return;
+  if (keyPress.length > 1 || !(/^[A-Z]/.test(keyPress))) return;
   if (col >= 5) return; 
   
-  guess += keyPressUpperCase;
+  guess += keyPress;
   box.classList.add('pulse');
-  box.innerHTML = keyPressUpperCase;
+  box.innerHTML = keyPress;
   col++;
 }
+
+// async function registerKey(event) {  
+//   const keyPress = event.key;
+//   const keyPressUpperCase = keyPress.toUpperCase();
+  
+//   const gridRow = document.querySelector(`[data-grid-row="${row}"]`);
+//   const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+//   lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
+
+//   if (keyPress === 'Enter') {
+//     if (guess.length === 5) {
+//       const isValid = await checkIfValidWord(guess);
+      
+//       if (!isValid) {
+//         // cancelFlipAnimation(row);
+//         runInvalidEvent(gridRow);
+//         return;
+//       }
+//       startFlipAnimation(row);
+//       processGuess(guess);
+//     }
+//   }
+  
+//   if (keyPress === 'Backspace') {
+//     if (event.repeat) return;
+//     if (col - 1 >= 0) {
+//       guess = guess.slice(0, -1);
+//       document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).innerHTML = '';
+//       document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).classList.remove('pulse');
+//       col--;
+//     }
+//   }
+  
+//   if (!(event.keyCode >= 65 && event.keyCode <= 90)) return;
+//   if (col >= 5) return; 
+  
+//   guess += keyPressUpperCase;
+//   box.classList.add('pulse');
+//   box.innerHTML = keyPressUpperCase;
+//   col++;
+// }
 
 async function getWord() {
   word = await getRandomWord();
@@ -60,6 +128,7 @@ async function getWord() {
 }
 
 function processGuess(guessToProcess) {
+  lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
   updateUsedLetters(guessToProcess);
   
   const isCorrect = runCheck(guessToProcess, word, row, lastBox);
@@ -88,14 +157,17 @@ function updateUsedLetters(guessWord) {
   }
 }
 
-function runInvalidEvent(rowToShake) {
+function runInvalidEvent(rowToShake, hasEnoughLetters) {
   rowToShake.classList.add('grid-row-shake');
-  wordElement.innerHTML = 'Not in word list!';
-  wordElement.classList.add('invalid-word-msg');
   clearTimeout(timeoutIdMsg);
   
+  if (hasEnoughLetters)  {
+    wordElement.innerHTML = 'NOT IN WORD LIST';
+  } else {
+    wordElement.innerHTML = 'NOT ENOUGH LETTERS';
+  }
+  
   timeoutIdMsg = setTimeout(() => {
-    wordElement.classList.remove('invalid-word-msg');
     wordElement.innerHTML = ' ';
   }, 3000);
   
@@ -105,7 +177,8 @@ function runInvalidEvent(rowToShake) {
 }
 
 function runEndgame() {
-  document.removeEventListener('keydown', registerKey);
+  // keys.
+  
 }
 
 function startFlipAnimation(row) {
