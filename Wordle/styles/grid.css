@@ -66,3 +66,14 @@
 .no-flip {
   animation: none;
 }
+
+@keyframes bounce {
+  20% { transform: translateY(-1.8rem); }
+  40% { transform: translateY(.4rem) }
+  60% { transform: translateY(-1rem) }
+  80% { transform: translateY(.2rem) }
+}
+
+.bounce {
+  animation: bounce .4s linear;
+}

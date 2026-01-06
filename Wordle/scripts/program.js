@@ -21,24 +21,23 @@ document.addEventListener('pointerup', () => {
   actionAllowed = true;
 })
 
-document.addEventListener('keydown', (event) => {
-  const keyPress = event.key.toUpperCase();
-  document.querySelector(`[data-key="${keyPress}"]`).click();
-});
-
 keys.forEach(key => {
-  const keyValue = key.dataset.key;
-  
-  // key.addEventListener('click', handleKeyClick);
-  key.addEventListener('click', () => {
-    registerKey(keyValue);
-  })
+  key.addEventListener('click', handleVirtualKey);
 });
 
-// function handleKeyClick(key) {
-//   registerKey(keyValue);
-//   const keyValue = key.innerHTML;
-// }
+document.addEventListener('keydown', handlePhysicalKey);
+
+function handlePhysicalKey(event) {
+  if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+  const keyPress = event.key.toUpperCase();
+  const keyButton = document.querySelector(`[data-key="${keyPress}"]`);
+  if (keyButton) keyButton.click();
+}
+
+function handleVirtualKey(event) {
+  registerKey(event.currentTarget.dataset.key);
+}
 
 async function registerKey(keyPress) {
   const gridRow = document.querySelector(`[data-grid-row="${row}"]`);
@@ -53,7 +52,7 @@ async function registerKey(keyPress) {
         return;
       }
       
-      startFlipAnimation(row);
+      startAnimation('flip', row);
       processGuess(guess);
     } else {
       runInvalidEvent(gridRow, false);
@@ -81,47 +80,6 @@ async function registerKey(keyPress) {
   col++;
 }
 
-// async function registerKey(event) {  
-//   const keyPress = event.key;
-//   const keyPressUpperCase = keyPress.toUpperCase();
-  
-//   const gridRow = document.querySelector(`[data-grid-row="${row}"]`);
-//   const box = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-//   lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
-
-//   if (keyPress === 'Enter') {
-//     if (guess.length === 5) {
-//       const isValid = await checkIfValidWord(guess);
-      
-//       if (!isValid) {
-//         // cancelFlipAnimation(row);
-//         runInvalidEvent(gridRow);
-//         return;
-//       }
-//       startFlipAnimation(row);
-//       processGuess(guess);
-//     }
-//   }
-  
-//   if (keyPress === 'Backspace') {
-//     if (event.repeat) return;
-//     if (col - 1 >= 0) {
-//       guess = guess.slice(0, -1);
-//       document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).innerHTML = '';
-//       document.querySelector(`[data-row="${row}"][data-col="${col-1}"]`).classList.remove('pulse');
-//       col--;
-//     }
-//   }
-  
-//   if (!(event.keyCode >= 65 && event.keyCode <= 90)) return;
-//   if (col >= 5) return; 
-  
-//   guess += keyPressUpperCase;
-//   box.classList.add('pulse');
-//   box.innerHTML = keyPressUpperCase;
-//   col++;
-// }
-
 async function getWord() {
   word = await getRandomWord();
   console.log(`Word: ${word}`);
@@ -136,7 +94,9 @@ function processGuess(guessToProcess) {
   if (isCorrect) {
     lastBox.addEventListener('animationend', () => {
       wordElement.innerHTML = '&#10024; YAY &#10024;';
+      startAnimation('bounce', row - 1);
     });
+    
     runEndgame();
   } else if (row === 5) {
     lastBox.addEventListener('animationend', () => {
@@ -177,19 +137,24 @@ function runInvalidEvent(rowToShake, hasEnoughLetters) {
 }
 
 function runEndgame() {
-  // keys.
-  
+  keys.forEach(key => {
+    key.removeEventListener('click', handleVirtualKey);
+  });
+  document.removeEventListener('keydown', handlePhysicalKey);
 }
 
-function startFlipAnimation(row) {
+function startAnimation(type, row) {
   // flipTimeoutIds = [];
+  let delay = 350;
+  
+  if (type === 'bounce') delay = 100;
 
   for (let i = 0; i < 5; i++) {
     setTimeout(() => {
       document
         .querySelector(`[data-row="${row}"][data-col="${i}"]`)
-        .classList.add('flip');
-    }, 350 * (i));
+        .classList.add(type);
+    }, delay * (i));
 
     // flipTimeoutIds.push(id);
   }
