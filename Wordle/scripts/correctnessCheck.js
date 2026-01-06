@@ -8,10 +8,12 @@ function runCheck(guess, word, row, lastBox) {
   guessChars.forEach((char, index) => {    
     if (wordChars[index] === char) {
       guessChars[index] = '/';
-      wordChars[index] = '/'
+      wordChars[index] = '/';
+      
       lastBox.addEventListener('animationend', () => {
         document.querySelector(`[data-key="${char}"]`).classList.add('correct');
       });
+      
       col++
     }
   });
@@ -23,10 +25,12 @@ function runCheck(guess, word, row, lastBox) {
     if (wordChars.includes(char)) {
       guessChars[index] = '~';
       replaceWithTilde(wordChars, char);
+      
       lastBox.addEventListener('animationend', () => {
         if (document.querySelector(`[data-key="${char}"]`).classList.contains('correct')) return;
         document.querySelector(`[data-key="${char}"]`).classList.add('present');
       });
+      
       col++;
     }
   });
@@ -35,6 +39,7 @@ function runCheck(guess, word, row, lastBox) {
     if (char === '~' || char === '/') return;
     
     guessChars[index] = 'X';
+    
     lastBox.addEventListener('animationend', () => {
       document.querySelector(`[data-key="${char}"]`).classList.add('absent');
     });
