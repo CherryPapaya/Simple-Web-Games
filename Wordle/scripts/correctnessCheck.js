@@ -54,14 +54,16 @@ function renderCheck(charArray, row) {
   let box;
   
   charArray.forEach((char, index) => {
-    box = document.querySelector(`[data-row="${row}"][data-col="${index}"]`);
-    
-    if (char === '/') {
-      box.classList.add('correct');
-    } else if (char === '~') {
-      box.classList.add('present');
-    } else if (char === 'X') {
-      box.classList.add('absent');
-    }
+    setTimeout(() => {
+      box = document.querySelector(`[data-row="${row}"][data-col="${index}"]`);
+      
+      if (char === '/') {
+        box.classList.add('correct');
+      } else if (char === '~') {
+        box.classList.add('present');
+      } else if (char === 'X') {
+        box.classList.add('absent');
+      }
+    }, 250 + 300 * (index));
   });
 }

@@ -1,8 +1,6 @@
 .grid {
-  display: flex;
-  flex-direction: column;
-  /* grid-template-columns: repeat(5, auto);
-  gap: .4rem; */
+  display: grid;
+  grid-template-columns: min-content;
   margin-bottom: 1rem;
 }
 
@@ -41,4 +39,27 @@
 
 .absent {
   background-color: rgb(47, 47, 47);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2) }
+}
+
+.pulse {
+  animation: pulse .05s linear;
+  border: 1px solid rgb(109, 109, 109); 
+}
+
+@keyframes flip {
+  0% {transform: scaleY(1);}
+  50% { transform: scaleY(0);}
+}
+
+.flip {
+  animation: flip .5s linear;
+}
+
+.no-flip {
+  animation: none;
 }
