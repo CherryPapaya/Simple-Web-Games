@@ -10,6 +10,8 @@ function runCheck(guess, word, row, lastBox) {
       guessChars[index] = '/';
       wordChars[index] = '/';
       
+      updateUsedLetters(char, 'correct');
+      
       lastBox.addEventListener('animationend', () => {
         document.querySelector(`[data-key="${char}"]`).classList.add('correct');
       });
@@ -26,6 +28,10 @@ function runCheck(guess, word, row, lastBox) {
       guessChars[index] = '~';
       replaceWithTilde(wordChars, char);
       
+      if (usedLetters.get(char) !== 'correct') {
+        updateUsedLetters(char, 'present');
+      }
+      
       lastBox.addEventListener('animationend', () => {
         if (document.querySelector(`[data-key="${char}"]`).classList.contains('correct')) return;
         document.querySelector(`[data-key="${char}"]`).classList.add('present');
@@ -39,6 +45,8 @@ function runCheck(guess, word, row, lastBox) {
     if (char === '~' || char === '/') return;
     
     guessChars[index] = 'X';
+    
+    updateUsedLetters(char, 'absent');
     
     lastBox.addEventListener('animationend', () => {
       document.querySelector(`[data-key="${char}"]`).classList.add('absent');
@@ -81,4 +89,8 @@ function renderCheck(charArray, row) {
       }
     }, 250 + 350 * (index));
   });
+}
+
+function updateUsedLetters(letter, state) {
+  usedLetters.set(letter, state);
 }

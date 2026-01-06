@@ -2,7 +2,8 @@ let word;
 let guess = '';
 let row = 0;
 let col = 0;
-let usedLetters = []; // should be Map (correctness, char);
+let usedLetters = new Map();
+let guesses; 
 let timeoutIdMsg;
 let lastBox;
 let backspaceAllowed = true;
@@ -13,6 +14,8 @@ const wordElement = document.querySelector('.js-word');
 
 getWord();
 generateGrid();
+guesses = JSON.parse(localStorage.getItem('guesses', JSON.stringify(guesses))) || [];
+setBoxValue();
 
 document.addEventListener('keyup', (event) => {
   if (event.key === 'Backspace') backspaceAllowed = true;
@@ -57,8 +60,13 @@ async function registerKey(keyPress) {
           return;
         }
         
+        guesses.push(guess);
+        localStorage.setItem('guesses', JSON.stringify(guesses));
+        console.log(localStorage.getItem('guesses'));
+        
         startAnimation('flip', row);
         processGuess(guess);
+        // console.log(usedLetters);
         lastBox.addEventListener('animationend', () => {
           keyPressAllowed = true;
         });
@@ -89,16 +97,24 @@ async function registerKey(keyPress) {
   }
 }
 
+function setBoxValue() {
+  guesses.forEach(guess => {
+    for (let i = 0; i < 5; i++) {
+      box = document.querySelector(`[data-row="${row}"][data-col="${i}"]`);
+      box.innerHTML = guess.charAt(i);
+    }
+    processGuess(guess);
+  });
+}
+
 async function getWord() {
   word = localStorage.getItem('word', word) || await getRandomWord();
-  // word = await getRandomWord();
   localStorage.setItem('word', word);
   console.log(`Word: ${word}`);
 }
 
 function processGuess(guessToProcess) {
   lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
-  updateUsedLetters(guessToProcess);
   
   const isCorrect = runCheck(guessToProcess, word, row, lastBox);
   
@@ -119,13 +135,6 @@ function processGuess(guessToProcess) {
   guess = '';
   row++;
   col = 0;
-}
-
-function updateUsedLetters(guessWord) {
-  for (let i = 0; i < 5; i++) {
-    const letter = toCharArray(guessWord)[i];
-    if (!usedLetters.includes(letter)) usedLetters.push(letter);
-  }
 }
 
 function runInvalidEvent(rowToShake, hasEnoughLetters) {
