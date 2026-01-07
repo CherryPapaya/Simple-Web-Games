@@ -14,7 +14,8 @@ const wordElement = document.querySelector('.js-word');
 getWord();
 generateGrid();
 guesses = JSON.parse(localStorage.getItem('guesses', JSON.stringify(guesses))) || [];
-setBoxValue();
+setGridProgres();
+setKeyProgress();
 
 document.addEventListener('keyup', (event) => {
   if (event.key === 'Backspace') backspaceAllowed = true;
@@ -61,11 +62,9 @@ async function registerKey(keyPress) {
         
         guesses.push(guess);
         localStorage.setItem('guesses', JSON.stringify(guesses));
-        console.log(localStorage.getItem('guesses'));
         
         startAnimation('flip', row);
         processGuess(guess, true);
-        // console.log(usedLetters);
         lastBox.addEventListener('animationend', () => {
           keyPressAllowed = true;
         });
@@ -96,13 +95,31 @@ async function registerKey(keyPress) {
   }
 }
 
-function setBoxValue() {
+function setGridProgres() {
   guesses.forEach(guess => {
     for (let i = 0; i < 5; i++) {
       box = document.querySelector(`[data-row="${row}"][data-col="${i}"]`);
       box.innerHTML = guess.charAt(i);
     }
     processGuess(guess, false);
+  });
+}
+
+function setKeyProgress() {
+  let keyboardKey;
+  let correctness;
+  
+  usedLetters.keys().forEach(letter => {
+    keyboardKey = document.querySelector(`[data-key="${letter}"]`);
+    correctness = usedLetters.get(letter);
+    
+    if (correctness === 'correct') {
+      keyboardKey.classList.add('correct');
+    } else if (correctness === 'present') {
+      keyboardKey.classList.add('present');
+    } else if (correctness === 'absent') {
+      keyboardKey.classList.add('absent');
+    }
   });
 }
 
@@ -162,6 +179,7 @@ function runEndgame() {
   document.removeEventListener('keydown', handlePhysicalKey);
   
   localStorage.clear();
+  usedLetters.clear();
 }
 
 function startAnimation(type, row) {
