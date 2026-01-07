@@ -1,4 +1,4 @@
-function runCheck(guess, word, row, lastBox) {
+function runCheck(guess, word, row, lastBox, playCheckAnim) {
   lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
   
   const guessChars = toCharArray(guess);
@@ -53,10 +53,10 @@ function runCheck(guess, word, row, lastBox) {
     });
   });
   
-  renderCheck(guessChars, row);
+  renderCheck(guessChars, row, playCheckAnim);
   
   if (guess === word) {
-    renderCheck(['/', '/', '/', '/', '/'], row);
+    renderCheck(['/', '/', '/', '/', '/'], row, true);
     return true;
   }
   
@@ -73,8 +73,15 @@ function replaceWithTilde(charArray, char) {
   charArray[index] = '~';
 }
 
-function renderCheck(charArray, row) {
+function renderCheck(charArray, row, playAnimation) {
   let box;
+  let offset = 0;
+  let delay = 0;
+
+  if (playAnimation) {
+    offset = 250;
+    delay = 350;
+  }
   
   charArray.forEach((char, index) => {
     setTimeout(() => {
@@ -87,7 +94,7 @@ function renderCheck(charArray, row) {
       } else if (char === 'X') {
         box.classList.add('absent');
       }
-    }, 250 + 350 * (index));
+    }, offset + delay * (index));
   });
 }
 

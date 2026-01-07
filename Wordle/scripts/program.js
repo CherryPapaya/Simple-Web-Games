@@ -10,7 +10,6 @@ let backspaceAllowed = true;
 let keyPressAllowed = true;
 const keys = document.querySelectorAll('.js-key');
 const wordElement = document.querySelector('.js-word');
-// let flipTimeoutIds;
 
 getWord();
 generateGrid();
@@ -65,7 +64,7 @@ async function registerKey(keyPress) {
         console.log(localStorage.getItem('guesses'));
         
         startAnimation('flip', row);
-        processGuess(guess);
+        processGuess(guess, true);
         // console.log(usedLetters);
         lastBox.addEventListener('animationend', () => {
           keyPressAllowed = true;
@@ -103,7 +102,7 @@ function setBoxValue() {
       box = document.querySelector(`[data-row="${row}"][data-col="${i}"]`);
       box.innerHTML = guess.charAt(i);
     }
-    processGuess(guess);
+    processGuess(guess, false);
   });
 }
 
@@ -113,10 +112,10 @@ async function getWord() {
   console.log(`Word: ${word}`);
 }
 
-function processGuess(guessToProcess) {
+function processGuess(guessToProcess, playCheckAnim) {
   lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
   
-  const isCorrect = runCheck(guessToProcess, word, row, lastBox);
+  const isCorrect = runCheck(guessToProcess, word, row, lastBox, playCheckAnim);
   
   if (isCorrect) {
     lastBox.addEventListener('animationend', () => {
@@ -166,7 +165,6 @@ function runEndgame() {
 }
 
 function startAnimation(type, row) {
-  // flipTimeoutIds = [];
   let delay = 350;
   
   if (type === 'bounce') delay = 100;
@@ -178,11 +176,5 @@ function startAnimation(type, row) {
         .classList.add(type);
     }, delay * (i));
 
-    // flipTimeoutIds.push(id);
   }
 }
-
-// function cancelFlipAnimation() {
-//   flipTimeoutIds.forEach(clearTimeout);
-//   flipTimeoutIds = [];
-// }
