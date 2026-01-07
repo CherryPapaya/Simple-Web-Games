@@ -1,4 +1,4 @@
-function runCheck(guess, word, row, lastBox) {
+function runCheck(guess, word, row, lastBox, playCheckAnim) {
   lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
   
   const guessChars = toCharArray(guess);
@@ -9,6 +9,8 @@ function runCheck(guess, word, row, lastBox) {
     if (wordChars[index] === char) {
       guessChars[index] = '/';
       wordChars[index] = '/';
+      
+      updateUsedLetters(char, 'correct');
       
       lastBox.addEventListener('animationend', () => {
         document.querySelector(`[data-key="${char}"]`).classList.add('correct');
@@ -26,6 +28,10 @@ function runCheck(guess, word, row, lastBox) {
       guessChars[index] = '~';
       replaceWithTilde(wordChars, char);
       
+      if (usedLetters.get(char) !== 'correct') {
+        updateUsedLetters(char, 'present');
+      }
+      
       lastBox.addEventListener('animationend', () => {
         if (document.querySelector(`[data-key="${char}"]`).classList.contains('correct')) return;
         document.querySelector(`[data-key="${char}"]`).classList.add('present');
@@ -40,15 +46,17 @@ function runCheck(guess, word, row, lastBox) {
     
     guessChars[index] = 'X';
     
+    updateUsedLetters(char, 'absent');
+    
     lastBox.addEventListener('animationend', () => {
       document.querySelector(`[data-key="${char}"]`).classList.add('absent');
     });
   });
   
-  renderCheck(guessChars, row);
+  renderCheck(guessChars, row, playCheckAnim);
   
   if (guess === word) {
-    renderCheck(['/', '/', '/', '/', '/'], row);
+    renderCheck(['/', '/', '/', '/', '/'], row, true);
     return true;
   }
   
@@ -65,8 +73,15 @@ function replaceWithTilde(charArray, char) {
   charArray[index] = '~';
 }
 
-function renderCheck(charArray, row) {
+function renderCheck(charArray, row, playAnimation) {
   let box;
+  let offset = 0;
+  let delay = 0;
+
+  if (playAnimation) {
+    offset = 250;
+    delay = 350;
+  }
   
   charArray.forEach((char, index) => {
     setTimeout(() => {
@@ -79,6 +94,10 @@ function renderCheck(charArray, row) {
       } else if (char === 'X') {
         box.classList.add('absent');
       }
-    }, 250 + 350 * (index));
+    }, offset + delay * (index));
   });
+}
+
+function updateUsedLetters(letter, state) {
+  usedLetters.set(letter, state);
 }

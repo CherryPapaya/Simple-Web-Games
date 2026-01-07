@@ -2,17 +2,20 @@ let word;
 let guess = '';
 let row = 0;
 let col = 0;
-let usedLetters = []; // should be Map (correctness, char);
+let usedLetters = new Map();
+let guesses; 
 let timeoutIdMsg;
 let lastBox;
 let backspaceAllowed = true;
 let keyPressAllowed = true;
 const keys = document.querySelectorAll('.js-key');
 const wordElement = document.querySelector('.js-word');
-// let flipTimeoutIds;
 
 getWord();
 generateGrid();
+guesses = JSON.parse(localStorage.getItem('guesses', JSON.stringify(guesses))) || [];
+setGridProgres();
+setKeyProgress();
 
 document.addEventListener('keyup', (event) => {
   if (event.key === 'Backspace') backspaceAllowed = true;
@@ -58,8 +61,11 @@ async function registerKey(keyPress) {
           return;
         }
         
+        guesses.push(guess);
+        localStorage.setItem('guesses', JSON.stringify(guesses));
+        
         startAnimation('flip', row);
-        processGuess(guess);
+        processGuess(guess, true);
         lastBox.addEventListener('animationend', () => {
           keyPressAllowed = true;
         });
@@ -90,18 +96,44 @@ async function registerKey(keyPress) {
   }
 }
 
+function setGridProgres() {
+  guesses.forEach(guess => {
+    for (let i = 0; i < 5; i++) {
+      box = document.querySelector(`[data-row="${row}"][data-col="${i}"]`);
+      box.innerHTML = guess.charAt(i);
+    }
+    processGuess(guess, false);
+  });
+}
+
+function setKeyProgress() {
+  let keyboardKey;
+  let correctness;
+  
+  usedLetters.keys().forEach(letter => {
+    keyboardKey = document.querySelector(`[data-key="${letter}"]`);
+    correctness = usedLetters.get(letter);
+    
+    if (correctness === 'correct') {
+      keyboardKey.classList.add('correct');
+    } else if (correctness === 'present') {
+      keyboardKey.classList.add('present');
+    } else if (correctness === 'absent') {
+      keyboardKey.classList.add('absent');
+    }
+  });
+}
+
 async function getWord() {
   word = localStorage.getItem('word', word) || await getRandomWord();
-  // word = await getRandomWord();
   localStorage.setItem('word', word);
   console.log(`Word: ${word}`);
 }
 
-function processGuess(guessToProcess) {
+function processGuess(guessToProcess, playCheckAnim) {
   lastBox = document.querySelector(`[data-row="${row}"][data-col="${4}"]`);
-  updateUsedLetters(guessToProcess);
   
-  const isCorrect = runCheck(guessToProcess, word, row, lastBox);
+  const isCorrect = runCheck(guessToProcess, word, row, lastBox, playCheckAnim);
   
   if (isCorrect) {
     lastBox.addEventListener('animationend', () => {
@@ -120,13 +152,6 @@ function processGuess(guessToProcess) {
   guess = '';
   row++;
   col = 0;
-}
-
-function updateUsedLetters(guessWord) {
-  for (let i = 0; i < 5; i++) {
-    const letter = toCharArray(guessWord)[i];
-    if (!usedLetters.includes(letter)) usedLetters.push(letter);
-  }
 }
 
 function runInvalidEvent(rowToShake, hasEnoughLetters) {
@@ -155,10 +180,10 @@ function runEndgame() {
   document.removeEventListener('keydown', handlePhysicalKey);
   
   localStorage.clear();
+  usedLetters.clear();
 }
 
 function startAnimation(type, row) {
-  // flipTimeoutIds = [];
   let delay = 350;
   
   if (type === 'bounce') delay = 100;
@@ -170,11 +195,5 @@ function startAnimation(type, row) {
         .classList.add(type);
     }, delay * (i));
 
-    // flipTimeoutIds.push(id);
   }
 }
-
-// function cancelFlipAnimation() {
-//   flipTimeoutIds.forEach(clearTimeout);
-//   flipTimeoutIds = [];
-// }
