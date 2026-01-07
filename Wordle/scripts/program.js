@@ -54,6 +54,7 @@ async function registerKey(keyPress) {
         
         if (!isValid) {
           runInvalidEvent(gridRow, true);
+          keyPressAllowed = true;
           return;
         }
         
