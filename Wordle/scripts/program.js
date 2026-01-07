@@ -4,12 +4,12 @@ let row = 0;
 let col = 0;
 let usedLetters = new Map();
 let guesses; 
-let timeoutIdMsg;
+let popupTimeoutId;
 let lastBox;
 let backspaceAllowed = true;
 let keyPressAllowed = true;
 const keys = document.querySelectorAll('.js-key');
-const wordElement = document.querySelector('.js-word');
+const popupContainer = document.querySelector('.js-popup-container');
 const newGameBtn = document.querySelector('.js-new-game-btn');
 
 getWord();
@@ -21,6 +21,7 @@ setKeyProgress();
 newGameBtn.addEventListener('click', () => {
   runEndgame();
   location.reload();
+  alert('Hello there');
 })
 
 document.addEventListener('keyup', (event) => {
@@ -142,15 +143,17 @@ function processGuess(guessToProcess, playCheckAnim) {
   const isCorrect = runCheck(guessToProcess, word, row, lastBox, playCheckAnim);
   
   if (isCorrect) {
-    lastBox.addEventListener('animationend', () => {
-      wordElement.innerHTML = '&#10024; YAY &#10024;';
+    lastBox.addEventListener('animationend', (animEvent) => {
       startAnimation('bounce', row - 1);
+      if (animEvent.animationName === 'flip') {
+        showPopup('&#10024; YAY &#10024;');
+      }
     });
     
     runEndgame();
   } else if (row === 5) {
     lastBox.addEventListener('animationend', () => {
-      wordElement.innerHTML = word;
+      showPopup(word);
     });
     runEndgame();
   }
@@ -162,21 +165,20 @@ function processGuess(guessToProcess, playCheckAnim) {
 
 function runInvalidEvent(rowToShake, hasEnoughLetters) {
   rowToShake.classList.add('grid-row-shake');
-  clearTimeout(timeoutIdMsg);
+  
+  clearTimeout(popupTimeoutId);
   
   if (hasEnoughLetters)  {
-    wordElement.innerHTML = 'NOT IN WORD LIST';
+    showPopup('Not in word list');
   } else {
-    wordElement.innerHTML = 'NOT ENOUGH LETTERS';
+    showPopup('Not enough letters');
   }
   
-  timeoutIdMsg = setTimeout(() => {
-    wordElement.innerHTML = ' ';
-  }, 3000);
-  
   setTimeout(() => {
+    keyPressAllowed = true;
     rowToShake.classList.remove('grid-row-shake');
   }, 500);
+  
 }
 
 function runEndgame() {
@@ -190,9 +192,8 @@ function runEndgame() {
 }
 
 function startAnimation(type, row) {
-  let delay = 350;
-  
-  if (type === 'bounce') delay = 100;
+  let delay;
+  type === 'bounce' ? delay = 100 : delay = 350;
 
   for (let i = 0; i < 5; i++) {
     setTimeout(() => {
@@ -200,6 +201,25 @@ function startAnimation(type, row) {
         .querySelector(`[data-row="${row}"][data-col="${i}"]`)
         .classList.add(type);
     }, delay * (i));
-
   }
+}
+
+function showPopup(content) {
+  const popup = document.createElement('div');
+  popup.className = 'popup js-popup';
+  popup.innerHTML = content;
+  
+  popupContainer.appendChild(popup);
+  
+  const children = [...popupContainer.children];
+
+  children.forEach(child => {
+    if (!content.includes('YAY') && content !== word) {
+      child.classList.add('fade-out');
+      
+      setTimeout(() => {
+        child.remove();
+      }, 2000);
+    }
+  });
 }
