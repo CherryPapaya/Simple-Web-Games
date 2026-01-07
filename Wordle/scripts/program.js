@@ -21,7 +21,6 @@ setKeyProgress();
 newGameBtn.addEventListener('click', () => {
   runEndgame();
   location.reload();
-  alert('Hello there');
 })
 
 document.addEventListener('keyup', (event) => {
