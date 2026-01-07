@@ -109,6 +109,10 @@ main {
   font-size: .65rem;
 }
 
+[data-key="BACKSPACE"] {
+  font-size: 1rem;;
+}
+
 .key-absent {
   background-color: darkgray;
 }
