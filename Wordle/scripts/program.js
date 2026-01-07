@@ -10,12 +10,18 @@ let backspaceAllowed = true;
 let keyPressAllowed = true;
 const keys = document.querySelectorAll('.js-key');
 const wordElement = document.querySelector('.js-word');
+const newGameBtn = document.querySelector('.js-new-game-btn');
 
 getWord();
 generateGrid();
 guesses = JSON.parse(localStorage.getItem('guesses', JSON.stringify(guesses))) || [];
 setGridProgres();
 setKeyProgress();
+
+newGameBtn.addEventListener('click', () => {
+  runEndgame();
+  location.reload();
+})
 
 document.addEventListener('keyup', (event) => {
   if (event.key === 'Backspace') backspaceAllowed = true;
