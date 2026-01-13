@@ -21,15 +21,15 @@ setKeyProgress();
 newGameBtn.addEventListener('click', () => {
   runEndgame();
   location.reload();
-})
+});
 
 document.addEventListener('keyup', (event) => {
   if (event.key === 'Backspace') backspaceAllowed = true;
-})
+});
 
 document.addEventListener('pointerup', () => {
   backspaceAllowed = true;
-})
+});
 
 keys.forEach(key => {
   key.addEventListener('click', handleVirtualKey);
