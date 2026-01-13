@@ -190,15 +190,15 @@ function runEndgame() {
   usedLetters.clear();
 }
 
-function startAnimation(type, row) {
+function startAnimation(animationName, row) {
   let delay;
-  type === 'bounce' ? delay = 100 : delay = 350;
+  animationName === 'bounce' ? delay = 100 : delay = 350;
 
   for (let i = 0; i < 5; i++) {
     setTimeout(() => {
       document
         .querySelector(`[data-row="${row}"][data-col="${i}"]`)
-        .classList.add(type);
+        .classList.add(animationName);
     }, delay * (i));
   }
 }
@@ -216,9 +216,9 @@ function showPopup(content) {
     if (!content.includes('YAY') && content !== word) {
       child.classList.add('fade-out');
       
-      setTimeout(() => {
+      child.addEventListener('animationend', () => {
         child.remove();
-      }, 2000);
+      }, { once: true });
     }
   });
 }

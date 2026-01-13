@@ -68,7 +68,7 @@ main {
 }
 
 .fade-out {
-  animation: fade-out 2.1s linear;
+  animation: fade-out 2s linear;
 }
 
 .keyboard {
